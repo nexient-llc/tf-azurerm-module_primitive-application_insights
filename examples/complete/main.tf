@@ -10,20 +10,53 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-resource "random_integer" "cake_pos" {
-  max = var.length - 2
-  min = 1
+module "resource_names" {
+  source = "git::https://github.com/nexient-llc/tf-module-resource_name.git?ref=1.1.0"
+
+  for_each = var.resource_names_map
+
+  logical_product_family  = var.product_family
+  logical_product_service = var.product_service
+  region                  = var.region
+  class_env               = var.environment
+  cloud_resource_type     = each.value.name
+  instance_env            = var.environment_number
+  maximum_length          = each.value.max_length
 }
 
+module "resource_group" {
+  source = "git::https://github.com/nexient-llc/tf-azurerm-module_primitive-resource_group.git?ref=0.2.0"
 
-module "cake_prefix" {
-  source = "../.."
+  name     = module.resource_names["rg"].standard
+  location = var.region
 
-  length = random_integer.cake_pos.result
+  tags = merge(var.tags, { resource_name = module.resource_names["rg"].standard })
+
 }
 
-module "cake_suffix" {
+module "log_analytics_workspace" {
+  source = "git::https://github.com/nexient-llc/tf-azurerm-module_primitive-log_analytics_workspace.git?ref=0.1.1"
+
+  name                = module.resource_names["log_workspace"].standard
+  location            = var.region
+  resource_group_name = module.resource_group.name
+  sku                 = var.sku
+
+  tags = merge(var.tags, { resource_name = module.resource_names["log_workspace"].standard })
+
+  depends_on = [module.resource_group]
+
+}
+
+module "app_insights" {
   source = "../.."
 
-  length = (var.length - 1) - random_integer.cake_pos.result
+  name                = module.resource_names["app_insights"].standard
+  location            = var.region
+  resource_group_name = module.resource_group.name
+  workspace_id        = module.log_analytics_workspace.id
+
+  tags = merge(var.tags, { resource_name = module.resource_names["app_insights"].standard })
+
+  depends_on = [module.resource_group, module.log_analytics_workspace]
 }
