@@ -5,7 +5,7 @@
 
 ## Overview
 
-What does this module do?
+This terraform module creates an `Application Insights` resource in Azure.
 
 ## Pre-Commit hooks
 
