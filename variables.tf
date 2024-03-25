@@ -38,17 +38,22 @@ variable "retention_in_days" {
   EOT
   type        = number
   default     = 30
+
+  validation {
+    condition     = contains([30, 60, 90, 120, 180, 270, 365, 550, 730], var.retention_in_days)
+    error_message = "retention_in_days must be one of 30, 60, 90, 120, 180, 270, 365, 550 or 730"
+  }
 }
 
 variable "daily_data_cap_in_gb" {
   description = "Specifies the Application Insights component daily data volume cap in GB."
-  type        = string
+  type        = number
   default     = null
 }
 
 variable "daily_data_cap_notifications_disabled" {
   description = "Specifies if a notification email will be send when the daily data volume cap is met."
-  type        = string
+  type        = bool
   default     = null
 }
 

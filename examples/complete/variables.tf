@@ -35,9 +35,9 @@ variable "environment" {
 }
 
 variable "environment_number" {
-  description = "The environment count for the respective environment. Defaults to 000. Increments in value of 1"
+  description = "The environment count for the respective environment. Defaults to 0. Increments in value of 1"
   type        = string
-  default     = "000"
+  default     = "0"
 }
 
 variable "region" {
