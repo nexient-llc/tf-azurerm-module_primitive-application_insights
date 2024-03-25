@@ -10,6 +10,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-output "string" {
-  value = format("%s🍰%s", module.cake_prefix.string, module.cake_suffix.string)
+output "app_insights_id" {
+  value = module.app_insights.id
+}
+
+output "app_insights_name" {
+  value = module.app_insights.name
+}
+
+output "log_analytics_id" {
+  value = module.log_analytics_workspace.id
+}
+
+output "resource_group_id" {
+  value = module.resource_group.id
+}
+
+output "resource_group_name" {
+  value = module.resource_group.name
 }

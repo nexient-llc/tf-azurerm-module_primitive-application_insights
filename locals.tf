@@ -10,24 +10,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-output "id" {
-  value = azurerm_application_insights.app_insights.id
-}
+locals {
+  default_tags = {
+    provisioner = "terraform"
+  }
 
-output "name" {
-  value = azurerm_application_insights.app_insights.name
-}
-
-output "app_id" {
-  value = azurerm_application_insights.app_insights.app_id
-}
-
-output "instrumentation_key" {
-  value     = azurerm_application_insights.app_insights.instrumentation_key
-  sensitive = true
-}
-
-output "connection_string" {
-  value     = azurerm_application_insights.app_insights.connection_string
-  sensitive = true
+  tags = merge(
+    var.tags,
+    local.default_tags
+  )
 }

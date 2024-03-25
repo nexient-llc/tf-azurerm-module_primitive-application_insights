@@ -10,24 +10,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-output "id" {
-  value = azurerm_application_insights.app_insights.id
-}
+terraform {
+  required_version = ">= 1.5.0, <= 1.5.5"
 
-output "name" {
-  value = azurerm_application_insights.app_insights.name
-}
-
-output "app_id" {
-  value = azurerm_application_insights.app_insights.app_id
-}
-
-output "instrumentation_key" {
-  value     = azurerm_application_insights.app_insights.instrumentation_key
-  sensitive = true
-}
-
-output "connection_string" {
-  value     = azurerm_application_insights.app_insights.connection_string
-  sensitive = true
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~>3.67"
+    }
+  }
 }
